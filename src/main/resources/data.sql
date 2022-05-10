@@ -34,7 +34,7 @@ VALUES ('5', 'HMG0246', 'Nissan', 'Nissa Frontier', 'Branco', '2022-05-09', 'Jú
 INSERT INTO tb_controle_acesso(numero_vaga, numero_placa, marca_veiculo, modelo_veiculo, cor_veiculo, data_registro, nome_responsavel, numero_apartamento, bloco)
 VALUES ('6', 'GIQ7723', 'Jeep', 'Jeep Compass', 'Branco Perola', '2022-05-09', 'Francisca Eduarda Alves', '201', 'A');
 
-insert into tb_controle_acesso tb_controle_acesso(numero_vaga, numero_placa, marca_veiculo, modelo_veiculo, cor_veiculo, data_registro, nome_responsavel, numero_apartamento, bloco)
+insert into tb_controle_acesso (numero_vaga, numero_placa, marca_veiculo, modelo_veiculo, cor_veiculo, data_registro, nome_responsavel, numero_apartamento, bloco)
 values ('7', 'HID4539', 'Toyota', 'Hillux LS', 'Prata', '2022-5-09', 'Maria Oliveira de Carvalho', '302', 'C');
 
 

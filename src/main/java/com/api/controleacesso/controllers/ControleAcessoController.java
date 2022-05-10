@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
+import com.api.controleacesso.repositorys.filter.ControleAcessoFiltro;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -58,16 +59,13 @@ public class ControleAcessoController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOneControledeAcesso(@PathVariable(value = "id") UUID id){
         Optional<ControleAcessoModel> parkingSpotModelOptional = controleAcessoService.findById(id);
-        if (!parkingSpotModelOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga de estacionamento não encontrada.");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(parkingSpotModelOptional.get());
+        return parkingSpotModelOptional.<ResponseEntity<Object>>map(controleAcessoModel -> ResponseEntity.status(HttpStatus.OK).body(controleAcessoModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga de estacionamento não encontrada."));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteParkingSpot(@PathVariable(value = "id") UUID id) {
         Optional<ControleAcessoModel> parkingSpotModelOptional = controleAcessoService.findById(id);
-        if (!parkingSpotModelOptional.isPresent()) {
+        if (parkingSpotModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga de estacionamento não encontrada.");
         }
         controleAcessoService.delete(parkingSpotModelOptional.get());
@@ -78,7 +76,7 @@ public class ControleAcessoController {
     public ResponseEntity<Object> updateParkingSpot(@PathVariable(value = "id") UUID id,
                                                     @RequestBody @Valid ControleAcessoDTORequest controleAcessoDTO){
         Optional<ControleAcessoModel> parkingSpotModelOptional = controleAcessoService.findById(id);
-        if (!parkingSpotModelOptional.isPresent()) {
+        if (parkingSpotModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga de estacionamento não encontrada.");
         }
         
@@ -104,6 +102,15 @@ public class ControleAcessoController {
     	LOG.info("GET /parking-spot/numero-ap - numeroAp: {};{}", numeroAp, pageable);
         var veiculosPorBloco = controleAcessoService.buscarVeiculosPorNumeroApartamento(numeroAp, pageable);
         return veiculosPorBloco != null ? ResponseEntity.status(HttpStatus.OK).body(veiculosPorBloco) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/filtro")
+    public ResponseEntity<?> filtrarPor(
+            ControleAcessoFiltro filtro,
+            @PageableDefault(page = 0, size = 10, sort = "numeroVaga", direction = Sort.Direction.ASC) Pageable pageable){
+        LOG.info("GET /parking-spot/filtro - Filtro: {};{}", filtro, pageable);
+        var filtroVagasEstacionamento = controleAcessoService.filtrarPor(filtro, pageable);
+        return filtroVagasEstacionamento != null ? ResponseEntity.status(HttpStatus.OK).body(filtroVagasEstacionamento) : ResponseEntity.notFound().build();
     }
 }
 

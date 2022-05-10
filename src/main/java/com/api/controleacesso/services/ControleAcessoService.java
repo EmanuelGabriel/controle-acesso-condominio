@@ -1,24 +1,27 @@
 package com.api.controleacesso.services;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.transaction.Transactional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
 import com.api.controleacesso.dtos.ControleAcessoDTORequest;
 import com.api.controleacesso.dtos.ControleAcessoDTOResponse;
 import com.api.controleacesso.dtos.mapper.ControleAcessoMapper;
 import com.api.controleacesso.models.ControleAcessoModel;
 import com.api.controleacesso.repositorys.ControleAcessoRepository;
+import com.api.controleacesso.repositorys.filter.ControleAcessoFiltro;
 import com.api.controleacesso.services.exception.RegraNegocioException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+
+import javax.persistence.criteria.Predicate;
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * 
@@ -98,6 +101,56 @@ public class ControleAcessoService {
 		LOG.info("Buscar veículos registrados por número do apartamento - númeroApartamento: {};{}", numeroApartamento, pageable);
 		var veiculosPorBloco = controleAcessoRepository.findByNumeroApartamento(numeroApartamento, pageable);
 		return mapper.mapEntityPageToDTO(pageable, veiculosPorBloco);
+	}
+
+	public Page<ControleAcessoDTOResponse> filtrarPor(ControleAcessoFiltro filtro, Pageable pageable){
+		LOG.info("Filtrar por {};{}", filtro, pageable);
+
+		var pageControleAcesso = controleAcessoRepository.findAll((Specification<ControleAcessoModel>)(root, query, builder) -> {
+
+			var predicates = new ArrayList<Predicate>();
+
+			if (!ObjectUtils.isEmpty(filtro.getNumeroVaga())) {
+				predicates.add(builder.equal(root.get("numeroVaga"), filtro.getNumeroVaga()));
+			}
+
+			if (!ObjectUtils.isEmpty(filtro.getNumeroPlaca())) {
+				predicates.add(builder.like(builder.lower(root.get("numeroPlaca")), "%" + filtro.getNumeroPlaca().toLowerCase() + "%"));
+			}
+
+			if (!ObjectUtils.isEmpty(filtro.getMarcaVeiculo())) {
+				predicates.add(builder.like(builder.lower(root.get("marcaVeiculo")), "%" + filtro.getMarcaVeiculo().toLowerCase() + "%"));
+			}
+
+			if (!ObjectUtils.isEmpty(filtro.getModeloVeiculo())) {
+				predicates.add(builder.like(builder.lower(root.get("modeloVeiculo")), "%" + filtro.getModeloVeiculo().toLowerCase() + "%"));
+			}
+
+			if (!ObjectUtils.isEmpty(filtro.getCorVeiculo())) {
+				predicates.add(builder.like(builder.lower(root.get("corVeiculo")), "%" + filtro.getCorVeiculo().toLowerCase() + "%"));
+			}
+
+			if (!ObjectUtils.isEmpty(filtro.getNomeResponsavel())) {
+				predicates.add(builder.like(builder.lower(root.get("nomeResponsavel")), "%" + filtro.getNomeResponsavel().toLowerCase() + "%"));
+			}
+
+			if (!ObjectUtils.isEmpty(filtro.getNumeroApartamento())) {
+				predicates.add(builder.equal(root.get("numeroApartamento"), filtro.getNumeroApartamento()));
+			}
+
+			if (!ObjectUtils.isEmpty(filtro.getBloco())) {
+				predicates.add(builder.like(builder.lower(root.get("bloco")), "%" + filtro.getBloco().toLowerCase() + "%"));
+			}
+
+			// ORDENAÇÃO FEITA POR 'NUMERO_VAGA'
+			query.orderBy(builder.asc(root.get("numeroVaga")));
+
+			return builder.and(predicates.toArray(new Predicate[0]));
+		}, pageable);
+
+		pageControleAcesso.getTotalElements();
+		pageControleAcesso.getTotalPages();
+		return mapper.mapEntityPageToDTO(pageable, pageControleAcesso);
 	}
 	
 }
