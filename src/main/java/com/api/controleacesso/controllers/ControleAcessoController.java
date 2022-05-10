@@ -37,7 +37,7 @@ import com.api.controleacesso.services.ControleAcessoService;
 @RequestMapping(value = "/parking-spot", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ControleAcessoController {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ControleAcessoController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ControleAcessoController.class);
     private final ControleAcessoService controleAcessoService;
 
     public ControleAcessoController(ControleAcessoService controleAcessoService) {
@@ -45,19 +45,19 @@ public class ControleAcessoController {
     }
 
     @PostMapping
-    public ResponseEntity<ControleAcessoDTOResponse> saveControleAcesso(@RequestBody @Valid ControleAcessoDTORequest request){
+    public ResponseEntity<ControleAcessoDTOResponse> saveControleAcesso(@RequestBody @Valid ControleAcessoDTORequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(controleAcessoService.salvar(request));
     }
 
-	@GetMapping
-	public ResponseEntity<Page<ControleAcessoDTOResponse>> getAllControledeAcesso(
-			@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
-		var retorno = controleAcessoService.findAll(pageable);
-		return retorno != null ? ResponseEntity.status(HttpStatus.OK).body(retorno) : ResponseEntity.ok().build();
-	}
+    @GetMapping
+    public ResponseEntity<Page<ControleAcessoDTOResponse>> getAllControledeAcesso(
+            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        var retorno = controleAcessoService.findAll(pageable);
+        return retorno != null ? ResponseEntity.status(HttpStatus.OK).body(retorno) : ResponseEntity.ok().build();
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOneControledeAcesso(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> getOneControledeAcesso(@PathVariable(value = "id") UUID id) {
         Optional<ControleAcessoModel> parkingSpotModelOptional = controleAcessoService.findById(id);
         return parkingSpotModelOptional.<ResponseEntity<Object>>map(controleAcessoModel -> ResponseEntity.status(HttpStatus.OK).body(controleAcessoModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga de estacionamento não encontrada."));
     }
@@ -74,32 +74,32 @@ public class ControleAcessoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateParkingSpot(@PathVariable(value = "id") UUID id,
-                                                    @RequestBody @Valid ControleAcessoDTORequest controleAcessoDTO){
+                                                    @RequestBody @Valid ControleAcessoDTORequest controleAcessoDTO) {
         Optional<ControleAcessoModel> parkingSpotModelOptional = controleAcessoService.findById(id);
         if (parkingSpotModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga de estacionamento não encontrada.");
         }
-        
+
         var parkingSpotModel = new ControleAcessoModel();
         BeanUtils.copyProperties(controleAcessoDTO, parkingSpotModel);
         parkingSpotModel.setId(parkingSpotModelOptional.get().getId());
         parkingSpotModel.setDataRegistro(parkingSpotModelOptional.get().getDataRegistro());
         return null; //ResponseEntity.status(HttpStatus.OK).body(controleAcessoService.salvar(parkingSpotModel));
     }
-    
-    
+
+
     @GetMapping("/por-bloco")
-    public ResponseEntity<?> buscarVeiculosPorBloco(@RequestParam(value = "bloco") String bloco, 
-    		@PageableDefault(page = 0, size = 10, sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable){
-    	LOG.info("GET /parking-spot/por-bloco - bloco: {};{}", bloco, pageable);
+    public ResponseEntity<?> buscarVeiculosPorBloco(@RequestParam(value = "bloco") String bloco,
+                                                    @PageableDefault(page = 0, size = 10, sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable) {
+        LOG.info("GET /parking-spot/por-bloco - bloco: {};{}", bloco, pageable);
         var veiculosPorBloco = controleAcessoService.buscarPorBlocos(bloco, pageable);
         return veiculosPorBloco != null ? ResponseEntity.status(HttpStatus.OK).body(veiculosPorBloco) : ResponseEntity.notFound().build();
     }
-    
+
     @GetMapping("/numero-ap")
-    public ResponseEntity<?> buscarVeiculosPorNumeroDoApartamento(@RequestParam(value = "numeroAp") String numeroAp, 
-    		@PageableDefault(page = 0, size = 10, sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable){
-    	LOG.info("GET /parking-spot/numero-ap - numeroAp: {};{}", numeroAp, pageable);
+    public ResponseEntity<?> buscarVeiculosPorNumeroDoApartamento(@RequestParam(value = "numeroAp") String numeroAp,
+                                                                  @PageableDefault(page = 0, size = 10, sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable) {
+        LOG.info("GET /parking-spot/numero-ap - numeroAp: {};{}", numeroAp, pageable);
         var veiculosPorBloco = controleAcessoService.buscarVeiculosPorNumeroApartamento(numeroAp, pageable);
         return veiculosPorBloco != null ? ResponseEntity.status(HttpStatus.OK).body(veiculosPorBloco) : ResponseEntity.notFound().build();
     }
@@ -107,7 +107,7 @@ public class ControleAcessoController {
     @GetMapping("/filtro")
     public ResponseEntity<?> filtrarPor(
             ControleAcessoFiltro filtro,
-            @PageableDefault(page = 0, size = 10, sort = "numeroVaga", direction = Sort.Direction.ASC) Pageable pageable){
+            @PageableDefault(sort = "numeroVaga", direction = Sort.Direction.ASC) Pageable pageable) {
         LOG.info("GET /parking-spot/filtro - Filtro: {};{}", filtro, pageable);
         var filtroVagasEstacionamento = controleAcessoService.filtrarPor(filtro, pageable);
         return filtroVagasEstacionamento != null ? ResponseEntity.status(HttpStatus.OK).body(filtroVagasEstacionamento) : ResponseEntity.notFound().build();
