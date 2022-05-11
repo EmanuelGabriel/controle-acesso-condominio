@@ -152,5 +152,18 @@ public class ControleAcessoService {
 		pageControleAcesso.getTotalPages();
 		return mapper.mapEntityPageToDTO(pageable, pageControleAcesso);
 	}
+
+
+	public Page<ControleAcessoDTOResponse> buscarPorNumeroPlaca(String numeroPlaca, Pageable pageable){
+		LOG.info("Buscar por número da placa {};{}", numeroPlaca, pageable);
+		var resultado = controleAcessoRepository.buscarPorNumeroPlaca(numeroPlaca, pageable);
+		return mapper.mapEntityPageToDTO(pageable, resultado);
+	}
+
+	public Page<ControleAcessoDTOResponse> buscarVeiculoPorModeloVeiculoCorVeiculo(String modeloVeiculo, String corVeiculo, Pageable pageable){
+		LOG.info("Buscar veículo modelo e cor {};{};{}", modeloVeiculo, corVeiculo, pageable);
+		var pageModelResposta = controleAcessoRepository.buscarModeloVeiculoCorVeiculo(modeloVeiculo, corVeiculo, pageable);
+		return mapper.mapEntityPageToDTO(pageable, pageModelResposta);
+	}
 	
 }

@@ -1,11 +1,10 @@
 package com.api.controleacesso.controllers;
 
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.validation.Valid;
-
+import com.api.controleacesso.dtos.ControleAcessoDTORequest;
+import com.api.controleacesso.dtos.ControleAcessoDTOResponse;
+import com.api.controleacesso.models.ControleAcessoModel;
 import com.api.controleacesso.repositorys.filter.ControleAcessoFiltro;
+import com.api.controleacesso.services.ControleAcessoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -16,21 +15,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.api.controleacesso.dtos.ControleAcessoDTORequest;
-import com.api.controleacesso.dtos.ControleAcessoDTOResponse;
-import com.api.controleacesso.models.ControleAcessoModel;
-import com.api.controleacesso.services.ControleAcessoService;
+import javax.validation.Valid;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "x", maxAge = 3600)
@@ -111,6 +100,26 @@ public class ControleAcessoController {
         LOG.info("GET /parking-spot/filtro - Filtro: {};{}", filtro, pageable);
         var filtroVagasEstacionamento = controleAcessoService.filtrarPor(filtro, pageable);
         return filtroVagasEstacionamento != null ? ResponseEntity.status(HttpStatus.OK).body(filtroVagasEstacionamento) : ResponseEntity.notFound().build();
+    }
+
+
+    @GetMapping("{numeroPlaca}/placa")
+    public ResponseEntity<?> buscarPorNumeroPlaca(
+            @PathVariable(value = "numeroPlaca") String numeroPlaca,
+            @PageableDefault Pageable pageable) {
+        LOG.info("GET /parking-spot/{}/placa - {}", numeroPlaca, pageable);
+        var resposta = controleAcessoService.buscarPorNumeroPlaca(numeroPlaca, pageable);
+        return resposta != null ? ResponseEntity.status(HttpStatus.OK).body(resposta) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("{modeloVeiculo}/modelo/{corVeiculo}/cor")
+    public ResponseEntity<?> buscarVeiculoPorModeloVeiculoCorVeiculo(
+            @PathVariable(value = "modeloVeiculo") String modeloVeiculo,
+            @PathVariable(value = "corVeiculo") String corVeiculo,
+            @PageableDefault Pageable pageable) {
+        LOG.info("GET /parking-spot/{}/modelo/{}/cor - {}", modeloVeiculo, corVeiculo, pageable);
+        var resposta = controleAcessoService.buscarVeiculoPorModeloVeiculoCorVeiculo(modeloVeiculo, corVeiculo, pageable);
+        return resposta != null ? ResponseEntity.status(HttpStatus.OK).body(resposta) : ResponseEntity.notFound().build();
     }
 }
 
