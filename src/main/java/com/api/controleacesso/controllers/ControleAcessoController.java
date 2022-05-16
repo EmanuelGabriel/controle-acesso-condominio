@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "x", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping(value = "/parking-spot", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ControleAcessoController {
 
