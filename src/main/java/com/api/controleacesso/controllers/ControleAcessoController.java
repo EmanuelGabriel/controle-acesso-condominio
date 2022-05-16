@@ -40,7 +40,8 @@ public class ControleAcessoController {
 
     @GetMapping
     public ResponseEntity<Page<ControleAcessoDTOResponse>> getAllControledeAcesso(
-            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable) {
+        LOG.info("GET /parking-spot - {}", pageable);
         var retorno = controleAcessoService.findAll(pageable);
         return retorno != null ? ResponseEntity.status(HttpStatus.OK).body(retorno) : ResponseEntity.ok().build();
     }
@@ -79,7 +80,7 @@ public class ControleAcessoController {
 
     @GetMapping("/por-bloco")
     public ResponseEntity<?> buscarVeiculosPorBloco(@RequestParam(value = "bloco") String bloco,
-                                                    @PageableDefault(page = 0, size = 10, sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable) {
+                                                    @PageableDefault(sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable) {
         LOG.info("GET /parking-spot/por-bloco - bloco: {};{}", bloco, pageable);
         var veiculosPorBloco = controleAcessoService.buscarPorBlocos(bloco, pageable);
         return veiculosPorBloco != null ? ResponseEntity.status(HttpStatus.OK).body(veiculosPorBloco) : ResponseEntity.notFound().build();
@@ -87,13 +88,13 @@ public class ControleAcessoController {
 
     @GetMapping("/numero-ap")
     public ResponseEntity<?> buscarVeiculosPorNumeroDoApartamento(@RequestParam(value = "numeroAp") String numeroAp,
-                                                                  @PageableDefault(page = 0, size = 10, sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable) {
+                                                                  @PageableDefault(sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable) {
         LOG.info("GET /parking-spot/numero-ap - numeroAp: {};{}", numeroAp, pageable);
         var veiculosPorBloco = controleAcessoService.buscarVeiculosPorNumeroApartamento(numeroAp, pageable);
         return veiculosPorBloco != null ? ResponseEntity.status(HttpStatus.OK).body(veiculosPorBloco) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/filtro")
+    @GetMapping(value = "/filtro", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> filtrarPor(
             ControleAcessoFiltro filtro,
             @PageableDefault(sort = "numeroVaga", direction = Sort.Direction.ASC) Pageable pageable) {
