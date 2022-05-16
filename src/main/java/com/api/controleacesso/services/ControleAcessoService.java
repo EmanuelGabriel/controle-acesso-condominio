@@ -78,6 +78,7 @@ public class ControleAcessoService {
 	}
 
 	public Page<ControleAcessoDTOResponse> findAll(Pageable pageable) {
+		LOG.info("Buscar todos - {}", pageable);
 		return mapper.mapEntityPageToDTO(pageable, controleAcessoRepository.findAll(pageable));
 	}
 

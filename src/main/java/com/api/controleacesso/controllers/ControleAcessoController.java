@@ -39,11 +39,11 @@ public class ControleAcessoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ControleAcessoDTOResponse>> getAllControledeAcesso(
+    public ResponseEntity<Page<ControleAcessoDTOResponse>> buscarTodos(
             @PageableDefault(sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable) {
         LOG.info("GET /parking-spot - {}", pageable);
-        var retorno = controleAcessoService.findAll(pageable);
-        return retorno != null ? ResponseEntity.status(HttpStatus.OK).body(retorno) : ResponseEntity.ok().build();
+        var pageDto = controleAcessoService.findAll(pageable);
+        return pageDto != null ? ResponseEntity.status(HttpStatus.OK).body(pageDto) : ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
