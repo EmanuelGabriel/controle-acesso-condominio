@@ -50,13 +50,13 @@ public class ControleAcessoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getOneControledeAcesso(@PathVariable(value = "id") UUID id) {
-        Optional<ControleAcessoModel> parkingSpotModelOptional = controleAcessoService.findById(id);
+        var parkingSpotModelOptional = controleAcessoService.findById(id);
         return parkingSpotModelOptional.<ResponseEntity<Object>>map(controleAcessoModel -> ResponseEntity.status(HttpStatus.OK).body(controleAcessoModel)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga de estacionamento não encontrada."));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteParkingSpot(@PathVariable(value = "id") UUID id) {
-        Optional<ControleAcessoModel> parkingSpotModelOptional = controleAcessoService.findById(id);
+        var parkingSpotModelOptional = controleAcessoService.findById(id);
         if (parkingSpotModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga de estacionamento não encontrada.");
         }
@@ -67,7 +67,7 @@ public class ControleAcessoController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateParkingSpot(@PathVariable(value = "id") UUID id,
                                                     @RequestBody @Valid ControleAcessoDTORequest controleAcessoDTO) {
-        Optional<ControleAcessoModel> parkingSpotModelOptional = controleAcessoService.findById(id);
+        var parkingSpotModelOptional = controleAcessoService.findById(id);
         if (parkingSpotModelOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vaga de estacionamento não encontrada.");
         }
@@ -102,7 +102,7 @@ public class ControleAcessoController {
             @PageableDefault(sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable) {
         LOG.info("GET /parking-spot/filtro - Filtro: {};{}", filtro, pageable);
         var filtroVagasEstacionamento = controleAcessoService.filtrarPor(filtro, pageable);
-        return filtroVagasEstacionamento != null ? ResponseEntity.status(HttpStatus.OK).body(filtroVagasEstacionamento) : ResponseEntity.notFound().build();
+        return filtroVagasEstacionamento != null ? ResponseEntity.status(HttpStatus.OK).body(filtroVagasEstacionamento) : ResponseEntity.ok().build();
     }
 
 
