@@ -1,6 +1,6 @@
 -- CRIANDO A TABELA CONTROLE DE ACESSO
 
-CREATE TABLE tb_controle_acesso (
+create table tb_controle_acesso(
       	id UUID DEFAULT RANDOM_UUID() NOT NULL,
         numero_vaga varchar(10) NOT NULL,
         numero_placa varchar(10) NOT NULL,
@@ -35,8 +35,23 @@ INSERT INTO tb_controle_acesso(numero_vaga, numero_placa, marca_veiculo, modelo_
 VALUES ('6', 'GIQ7723', 'Jeep', 'Jeep Compass', 'Branco Perola', '2022-05-09', 'Francisca Eduarda Alves', '201', 'A');
 
 insert into tb_controle_acesso (numero_vaga, numero_placa, marca_veiculo, modelo_veiculo, cor_veiculo, data_registro, nome_responsavel, numero_apartamento, bloco)
-values ('7', 'HID4539', 'Toyota', 'Hillux LS', 'Prata', '2022-5-09', 'Maria Oliveira de Carvalho', '302', 'C');
+values ('7', 'HID4539', 'Toyota', 'Hillux LS', 'Prata', '2022-05-09', 'Maria Oliveira de Carvalho', '302', 'C');
 
+insert into tb_controle_acesso (numero_vaga, numero_placa, marca_veiculo, modelo_veiculo, cor_veiculo, data_registro, nome_responsavel, numero_apartamento, bloco)
+values ('8', 'NQL4743', 'Toyota', 'Etios LS', 'Prata', '2022-01-10', 'Raimunda Souza Cabral', '302', 'C');
 
+insert into tb_controle_acesso (numero_vaga, numero_placa, marca_veiculo, modelo_veiculo, cor_veiculo, data_registro, nome_responsavel, numero_apartamento, bloco)
+values ('9', 'OUL2839', 'Fiat', 'Argo', 'Vermelho', '2022-02-20', 'Jonas Cardoso de Moreira', '303', 'D');
 
+insert into tb_controle_acesso (numero_vaga, numero_placa, marca_veiculo, modelo_veiculo, cor_veiculo, data_registro, nome_responsavel, numero_apartamento, bloco)
+values ('10', 'HVC0530', 'Bugre', 'Buggy VII/VII BIG', 'Prata', '2022-01-10', 'Julieta Barbosa de Moura', '303', 'D');
+
+insert into tb_controle_acesso (numero_vaga, numero_placa, marca_veiculo, modelo_veiculo, cor_veiculo, data_registro, nome_responsavel, numero_apartamento, bloco)
+values ('11', 'NDZ4869', 'BMW', 'M3 Sedan 3.0 Bi-Turbo 24V 4p', 'Marrom', '2022-01-10', 'Francisco Jardel Pereira dos Santos', '304', 'E');
+
+insert into tb_controle_acesso (numero_vaga, numero_placa, marca_veiculo, modelo_veiculo, cor_veiculo, data_registro, nome_responsavel, numero_apartamento, bloco)
+values ('12', 'NES1515', 'Peugeot', '407 Sedan 2.0 16V', 'Dourado', '2022-02-12', 'Andreia Mirella de Paula', '305', 'E');
+
+insert into tb_controle_acesso (numero_vaga, numero_placa, marca_veiculo, modelo_veiculo, cor_veiculo, data_registro, nome_responsavel, numero_apartamento, bloco)
+values ('13', 'NES7922', 'Peugeot', '208 16V', 'Prata', '2022-02-25', 'Fernanda Antonia Luzia', '306', 'F');
 

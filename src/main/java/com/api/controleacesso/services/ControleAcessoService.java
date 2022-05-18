@@ -6,6 +6,7 @@ import com.api.controleacesso.dtos.mapper.ControleAcessoMapper;
 import com.api.controleacesso.models.ControleAcessoModel;
 import com.api.controleacesso.repositorys.ControleAcessoRepository;
 import com.api.controleacesso.repositorys.filter.ControleAcessoFiltro;
+import com.api.controleacesso.repositorys.projections.ControleAcessoModelProjecao;
 import com.api.controleacesso.services.exception.RegraNegocioException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -165,6 +167,11 @@ public class ControleAcessoService {
 		LOG.info("Buscar veículo modelo e cor {};{};{}", modeloVeiculo, corVeiculo, pageable);
 		var pageModelResposta = controleAcessoRepository.buscarModeloVeiculoCorVeiculo(modeloVeiculo, corVeiculo, pageable);
 		return mapper.mapEntityPageToDTO(pageable, pageModelResposta);
+	}
+
+	public List<ControleAcessoModelProjecao> buscarQuantidadeVeiculosPorBlocos(){
+		LOG.info("Buscar quantidade de veículos por blocos");
+		return controleAcessoRepository.buscarQuantidadeVeiculosPorBlocos();
 	}
 	
 }

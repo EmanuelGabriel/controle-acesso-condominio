@@ -4,6 +4,7 @@ import com.api.controleacesso.dtos.ControleAcessoDTORequest;
 import com.api.controleacesso.dtos.ControleAcessoDTOResponse;
 import com.api.controleacesso.models.ControleAcessoModel;
 import com.api.controleacesso.repositorys.filter.ControleAcessoFiltro;
+import com.api.controleacesso.repositorys.projections.ControleAcessoModelProjecao;
 import com.api.controleacesso.services.ControleAcessoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -97,7 +99,7 @@ public class ControleAcessoController {
     @GetMapping(value = "/filtro", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> filtrarPor(
             ControleAcessoFiltro filtro,
-            @PageableDefault(sort = "numeroVaga", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(sort = "nomeResponsavel", direction = Sort.Direction.ASC) Pageable pageable) {
         LOG.info("GET /parking-spot/filtro - Filtro: {};{}", filtro, pageable);
         var filtroVagasEstacionamento = controleAcessoService.filtrarPor(filtro, pageable);
         return filtroVagasEstacionamento != null ? ResponseEntity.status(HttpStatus.OK).body(filtroVagasEstacionamento) : ResponseEntity.notFound().build();
@@ -121,6 +123,13 @@ public class ControleAcessoController {
         LOG.info("GET /parking-spot/{}/modelo/{}/cor - {}", modeloVeiculo, corVeiculo, pageable);
         var resposta = controleAcessoService.buscarVeiculoPorModeloVeiculoCorVeiculo(modeloVeiculo, corVeiculo, pageable);
         return resposta != null ? ResponseEntity.status(HttpStatus.OK).body(resposta) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping(value = "qtd-veiculos-blocos", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ControleAcessoModelProjecao>> buscarQtdVeiculosPorBlocos(){
+        LOG.info("GET /parking-spot/qtd-veiculos-blocos");
+        var quantidade = controleAcessoService.buscarQuantidadeVeiculosPorBlocos();
+        return ResponseEntity.status(HttpStatus.OK).body(quantidade);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.api.controleacesso.repositorys;
 
 import com.api.controleacesso.models.ControleAcessoModel;
+import com.api.controleacesso.repositorys.projections.ControleAcessoModelProjecao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -45,7 +47,8 @@ public interface ControleAcessoRepository extends JpaRepository<ControleAcessoMo
             "order by c.nomeResponsavel")
     Page<ControleAcessoModel> buscarModeloVeiculoCorVeiculo(String modeloVeiculo, String corVeiculo, Pageable pageable);
 
-
+    @Query("select c.bloco as bloco, count(c) as qtdVeiculos from ControleAcessoModel c group by c.bloco")
+    List<ControleAcessoModelProjecao> buscarQuantidadeVeiculosPorBlocos();
 
 
 }
