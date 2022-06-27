@@ -1,4 +1,4 @@
-package com.api.controleacesso.dtos;
+package com.api.controleacesso.dtos.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

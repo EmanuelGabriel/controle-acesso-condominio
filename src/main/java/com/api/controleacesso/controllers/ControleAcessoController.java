@@ -1,7 +1,7 @@
 package com.api.controleacesso.controllers;
 
-import com.api.controleacesso.dtos.ControleAcessoDTORequest;
-import com.api.controleacesso.dtos.ControleAcessoDTOResponse;
+import com.api.controleacesso.dtos.request.ControleAcessoDTORequest;
+import com.api.controleacesso.dtos.response.ControleAcessoDTOResponse;
 import com.api.controleacesso.models.ControleAcessoModel;
 import com.api.controleacesso.repositorys.filter.ControleAcessoFiltro;
 import com.api.controleacesso.repositorys.projections.ControleAcessoModelProjecao;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController

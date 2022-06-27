@@ -1,4 +1,4 @@
-package com.api.controleacesso.dtos;
+package com.api.controleacesso.dtos.response;
 
 import java.io.Serializable;
 

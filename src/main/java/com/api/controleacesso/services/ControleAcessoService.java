@@ -1,7 +1,7 @@
 package com.api.controleacesso.services;
 
-import com.api.controleacesso.dtos.ControleAcessoDTORequest;
-import com.api.controleacesso.dtos.ControleAcessoDTOResponse;
+import com.api.controleacesso.dtos.request.ControleAcessoDTORequest;
+import com.api.controleacesso.dtos.response.ControleAcessoDTOResponse;
 import com.api.controleacesso.dtos.mapper.ControleAcessoMapper;
 import com.api.controleacesso.models.ControleAcessoModel;
 import com.api.controleacesso.repositorys.ControleAcessoRepository;

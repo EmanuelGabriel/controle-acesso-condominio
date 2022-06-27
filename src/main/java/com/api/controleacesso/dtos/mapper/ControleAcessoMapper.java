@@ -9,8 +9,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import com.api.controleacesso.dtos.ControleAcessoDTORequest;
-import com.api.controleacesso.dtos.ControleAcessoDTOResponse;
+import com.api.controleacesso.dtos.request.ControleAcessoDTORequest;
+import com.api.controleacesso.dtos.response.ControleAcessoDTOResponse;
 import com.api.controleacesso.models.ControleAcessoModel;
 
 /**
